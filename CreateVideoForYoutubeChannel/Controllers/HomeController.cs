@@ -1,4 +1,5 @@
 ﻿using CreateVideoForYoutubeChannel.Models;
+using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -28,8 +29,8 @@ namespace CreateVideoForYoutubeChannel.Controllers
         public IActionResult Index(YuotubeModel model)
         {
             string urlAddress = model.Url;
+            string docItems = "";
 
-            string result = "";
             HttpWebRequest httpRequest = (HttpWebRequest)HttpWebRequest.Create(urlAddress);
             httpRequest.Timeout = 10000;
             httpRequest.UserAgent = "Code Sample Web Client";
@@ -46,7 +47,49 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
             using (StreamWriter sw = System.IO.File.CreateText(filepath))
             {
-                sw.WriteLine(result);
+                var doc = new HtmlAgilityPack.HtmlDocument();
+                doc.LoadHtml(result);
+
+                HtmlNode properties = doc.DocumentNode.SelectSingleNode("//div[@id='bilgiler']");
+
+                if (properties != null)
+                {
+                    HtmlNodeCollection groups = doc.DocumentNode.SelectNodes(".//div[@id='grup']");
+
+                    if (groups != null && groups.Count > 0)
+                    {
+                        string groupName = string.Empty;
+
+                        for (int i = 0; i < groups.Count; i++)
+                        {
+                            HtmlNode newItem = groups[i];
+
+                            groupName = newItem.SelectSingleNode(".//h3").InnerText;
+
+                            docItems += string.Format("***{0}**** \n", groupName);
+
+                            HtmlNode groupProperty = newItem.SelectSingleNode(".//ul[@class='grup']");
+
+                            HtmlNodeCollection groupChilNodes = groupProperty.ChildNodes;
+
+                            string propertyName = string.Empty;
+                            string propertyValue = string.Empty;
+
+                            foreach (var item2 in groupChilNodes)
+                            {
+                                if (item2.Name == "li")
+                                {
+                                    propertyName = item2.SelectSingleNode("strong").InnerText;
+                                    propertyValue = item2.SelectSingleNode("span//a") != null ? item2.SelectSingleNode("span//a").InnerText.Replace("\n", "") : item2.SelectSingleNode("span//span").InnerText.Replace("\n", "");
+
+                                    docItems += string.Format("{0}:{1} \n", propertyName, propertyValue);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                sw.WriteLine(docItems);
             }
 
             return View(model);
