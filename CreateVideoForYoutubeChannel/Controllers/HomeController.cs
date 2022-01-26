@@ -1,9 +1,11 @@
 ﻿using CreateVideoForYoutubeChannel.Models;
+using DocumentFormat.OpenXml.Packaging;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -28,7 +30,10 @@ namespace CreateVideoForYoutubeChannel.Controllers
         [HttpPost]
         public IActionResult Index(YuotubeModel model)
         {
+            // Epey
+
             string urlAddress = model.Url;
+            string result = "";
             string docItems = "";
 
             HttpWebRequest httpRequest = (HttpWebRequest)HttpWebRequest.Create(urlAddress);
@@ -90,6 +95,37 @@ namespace CreateVideoForYoutubeChannel.Controllers
                 }
 
                 sw.WriteLine(docItems);
+            }
+
+            // PPT
+
+            // just gets me the current location of the assembly to get a full path
+            string fileName = @"C:\Yutup\VS_PPT.pptx";
+
+            // open the presentation in edit mode -> the bool parameter stands for 'isEditable'
+            using (PresentationDocument document = PresentationDocument.Open(fileName, true))
+            {
+                // going through the slides of the presentation
+                foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
+                {
+                    // searching for a text with the placeholder i want to replace
+                    DocumentFormat.OpenXml.Drawing.Text text =
+                        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "My new cool title");
+
+                    // change the text
+                    if (text != null)
+                        text.Text = "Samsung";
+
+                    // searching for the second text with the placeholder i want to replace
+                    text =
+                        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "My new cool sub-title");
+
+                    // change the text
+                    if (text != null)
+                        text.Text = "IPhone";
+                }
+
+                document.Save();
             }
 
             return View(model);
