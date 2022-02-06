@@ -1,0 +1,16 @@
+﻿@model PhoneVSModel
+
+<form asp-action="Index" method="post" novalidate="">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label for="Phone1">Phone 1</label>
+        <input class="form-control" id="Phone1" type="text" asp-for="Phone1" required placeholder="Phone 1" />
+    </div>
+    <div class="form-group">
+        <label for="Phone2">Phone 2</label>
+        <input class="form-control" id="Phone2" type="text" asp-for="Phone2" required placeholder="Phone 2" />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit" name="submit">PPT Güncelle</button>
+    </div>
+</form>

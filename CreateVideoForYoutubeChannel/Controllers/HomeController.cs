@@ -32,12 +32,10 @@ namespace CreateVideoForYoutubeChannel.Controllers
         public IActionResult Index(YuotubeModel model)
         {
             // Epey
-
-            string urlAddress = model.Url;
             string result = "";
             string docItems = "";
 
-            HttpWebRequest httpRequest = (HttpWebRequest)HttpWebRequest.Create(urlAddress);
+            HttpWebRequest httpRequest = (HttpWebRequest)HttpWebRequest.Create(model.Url);
             httpRequest.Timeout = 10000;
             httpRequest.UserAgent = "Code Sample Web Client";
             httpRequest.Credentials = CredentialCache.DefaultCredentials;
@@ -45,16 +43,21 @@ namespace CreateVideoForYoutubeChannel.Controllers
             StreamReader stream = new StreamReader(respone.GetResponseStream(), Encoding.UTF8);
             result = stream.ReadToEnd();
 
+            var doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(result);
 
-            string filepath = @"C:\Yutup\" + model.ProductName.Replace(" ", "").Trim() + ".txt";
+            HtmlNode productName = doc.DocumentNode.SelectSingleNode("//div[@class='baslik']//h1//a");
+            model.ProductName = productName.InnerText;
+
+            string filepath = @"C:\Yutup\PHONE\" + model.ProductName.Replace(" ", "").Trim() + ".txt";
 
             if (System.IO.File.Exists(filepath))
                 System.IO.File.Delete(filepath);
 
             using (StreamWriter sw = System.IO.File.CreateText(filepath))
             {
-                var doc = new HtmlAgilityPack.HtmlDocument();
-                doc.LoadHtml(result);
+                docItems += string.Format("Ürün->{0} \n", model.ProductName);
+                docItems += string.Format("Url->{0} \n", model.Url);
 
                 HtmlNode properties = doc.DocumentNode.SelectSingleNode("//div[@id='bilgiler']");
 
@@ -98,48 +101,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
                 sw.WriteLine(docItems);
             }
 
-            // PPT
-
-            List<string> phoneProperties = new List<string>();
-            string filepath2 = @"C:\Yutup\SamsungGalaxyM22.txt";
-
-            using (StreamReader rd = System.IO.File.OpenText(filepath2))
-            {
-                while (!rd.EndOfStream)
-                {
-                    string str = rd.ReadLine();
-                    phoneProperties.Add(str);
-                }
-            }
-
-            // just gets me the current location of the assembly to get a full path
-            string fileName = @"C:\Yutup\Test1\VS_PPT - Modify 1.pptx";
-
-            // open the presentation in edit mode -> the bool parameter stands for 'isEditable'
-            using (PresentationDocument document = PresentationDocument.Open(fileName, true))
-            {
-                // going through the slides of the presentation
-                foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
-                {
-                    // searching for a text with the placeholder i want to replace
-                    DocumentFormat.OpenXml.Drawing.Text text =
-                        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product1_Çıkış_Yılı");
-
-                    // change the text
-                    if (text != null)
-                        text.Text = phoneProperties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1]; 
-
-                    // searching for the second text with the placeholder i want to replace
-                    text =
-                        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product2_Çıkış_Yılı");
-
-                    // change the text
-                    if (text != null)
-                        text.Text = phoneProperties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1];
-                }
-
-                document.Save();
-            }
+            ViewData["Message"] = "Dosya Başarıyla Oluşturulmuştur"; 
 
             return View(model);
         }
