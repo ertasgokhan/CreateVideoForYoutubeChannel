@@ -27,48 +27,91 @@ namespace CreateVideoForYoutubeChannel.Controllers
         {
             // PPT
 
-            List<string> phoneProperties = new List<string>();
-            string filepath2 = @"C:\Yutup\PHONE\" + phoneVSModel.Phone1.Replace(" ", "") + ".txt";
+            List<string> phone1Properties = new List<string>();
+            List<string> phone2Properties = new List<string>();
 
-            using (StreamReader rd = System.IO.File.OpenText(filepath2))
+            string filepathPhone1 = @"C:\Yutup\PHONE\" + phoneVSModel.Phone1.Replace(" ", "") + ".txt";
+            string filepathPhone2 = @"C:\Yutup\PHONE\" + phoneVSModel.Phone2.Replace(" ", "") + ".txt";
+
+            using (StreamReader rd = System.IO.File.OpenText(filepathPhone1))
             {
                 while (!rd.EndOfStream)
                 {
                     string str = rd.ReadLine();
-                    phoneProperties.Add(str);
+                    phone1Properties.Add(str);
+                }
+            }
+
+            using (StreamReader rd = System.IO.File.OpenText(filepathPhone2))
+            {
+                while (!rd.EndOfStream)
+                {
+                    string str = rd.ReadLine();
+                    phone2Properties.Add(str);
                 }
             }
 
             // just gets me the current location of the assembly to get a full path
-            string fileName = @"C:\Yutup\Test1\VS_PPT - Modify 1.pptx";
+            string fileName = @"C:\Yutup\PHONE\VS\VS_PPT_PHONE.pptx";
 
             // open the presentation in edit mode -> the bool parameter stands for 'isEditable'
             using (PresentationDocument document = PresentationDocument.Open(fileName, true))
             {
-                // going through the slides of the presentation
-                foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
+                string phone1NewItem = string.Empty;
+                string phone2NewItem = string.Empty;
+
+                foreach (var item in phone1Properties)
                 {
-                    // searching for a text with the placeholder i want to replace
-                    DocumentFormat.OpenXml.Drawing.Text text =
-                        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product1_Çıkış_Yılı");
+                    phone1NewItem = string.Format("Product1_{0}", item.Split("->")[0].Replace(" ", "_"));
 
-                    // change the text
-                    if (text != null)
-                        text.Text = phoneProperties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1];
+                    // going through the slides of the presentation
+                    foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
+                    {
+                        // searching for a text with the placeholder i want to replace
+                        DocumentFormat.OpenXml.Drawing.Text text =
+                            slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == phone1NewItem);
 
-                    // searching for the second text with the placeholder i want to replace
-                    text =
-                        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product2_Çıkış_Yılı");
-
-                    // change the text
-                    if (text != null)
-                        text.Text = phoneProperties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1];
+                        // change the text
+                        if (text != null)
+                            text.Text = phone1Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1];
+                    }
                 }
+
+                foreach (var item in phone2Properties)
+                {
+                    phone2NewItem = string.Format("Product2_{0}", item.Split("->")[0].Replace(" ", "_"));
+
+                    // going through the slides of the presentation
+                    foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
+                    {
+                        // searching for a text with the placeholder i want to replace
+                        DocumentFormat.OpenXml.Drawing.Text text =
+                            slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == phone2NewItem);
+
+                        // change the text
+                        if (text != null)
+                            text.Text = phone2Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1];
+                    }
+                }
+
+                //// going through the slides of the presentation
+                //foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
+                //{
+                //    // searching for the second text with the placeholder i want to replace
+                //    text =
+                //        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product2_Çıkış_Yılı");
+
+                //    // change the text
+                //    if (text != null)
+                //        text.Text = phone1Properties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1];
+                //}
 
                 document.Save();
             }
 
-            return View();
+            ViewData["Message"] = "PPT Başarıyla Güncellenmiştir";
+
+            return View(phoneVSModel);
         }
     }
 }
