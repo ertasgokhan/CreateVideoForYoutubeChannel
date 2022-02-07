@@ -62,7 +62,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
                 foreach (var item in phone1Properties)
                 {
-                    phone1NewItem = string.Format("Product1_{0}", item.Split("->")[0].Replace(" ", "_"));
+                    phone1NewItem = string.Format("Product1_{0}", item.Split("->")[0].Replace(" ", "_").Replace("/", "").Replace("(", "").Replace(")", "").Replace(".", ""));
 
                     // going through the slides of the presentation
                     foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
@@ -79,7 +79,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
                 foreach (var item in phone2Properties)
                 {
-                    phone2NewItem = string.Format("Product2_{0}", item.Split("->")[0].Replace(" ", "_"));
+                    phone2NewItem = string.Format("Product2_{0}", item.Split("->")[0].Replace(" ", "_").Replace("/", "").Replace("(", "").Replace(")", "").Replace(".", ""));
 
                     // going through the slides of the presentation
                     foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
