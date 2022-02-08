@@ -73,7 +73,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
                         // change the text
                         if (text != null)
-                            text.Text = phone1Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1];
+                            text.Text = phone1Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1].Replace("Var", "Yes").Replace("Yok", "No").Replace("Milyon", "Million").Replace("Milyar", "Billion").Replace("Cam", "Glass").Replace("Alüminyum", "Aluminum").Replace("Gram", "Grams").Replace("Çekirdek", "Core").Replace("Kablosu","Cable").Replace("Piksel","Pixel").Replace("Çift Hat", "Dual SIM");
                     }
                 }
 
@@ -90,7 +90,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
                         // change the text
                         if (text != null)
-                            text.Text = phone2Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1];
+                            text.Text = phone2Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1].Replace("Var", "Yes").Replace("Yok", "No").Replace("Milyon", "Million").Replace("Milyar", "Billion").Replace("Cam", "Glass").Replace("Alüminyum", "Aluminum").Replace("Gram", "Grams").Replace("Çekirdek", "Core").Replace("Kablosu", "Cable").Replace("Piksel", "Pixel").Replace("Çift Hat", "Dual SIM");
                     }
                 }
 
