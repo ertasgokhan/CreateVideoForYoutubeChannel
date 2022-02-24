@@ -49,7 +49,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
             HtmlNode productName = doc.DocumentNode.SelectSingleNode("//div[@class='baslik']//h1//a");
             model.ProductName = productName.InnerText;
 
-            string filepath = @"C:\Yutup\PHONE\" + model.ProductName.Replace(" ", "").Trim() + ".txt";
+            string filepath = @"C:\Yutup\PHONE\" + model.ProductName.Replace(" ", "").Replace("/", "").Trim() + ".txt";
 
             if (System.IO.File.Exists(filepath))
                 System.IO.File.Delete(filepath);
@@ -101,7 +101,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
                 sw.WriteLine(docItems);
             }
 
-            ViewData["Message"] = "Dosya Başarıyla Oluşturulmuştur"; 
+            ViewData["Message"] = "Dosya Başarıyla Oluşturulmuştur";
 
             return View(model);
         }
