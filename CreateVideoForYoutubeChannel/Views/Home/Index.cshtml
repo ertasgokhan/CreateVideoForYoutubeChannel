@@ -1,18 +1,24 @@
-﻿@model YuotubeModel
-
-<form asp-action="Index" method="post" novalidate="">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    @if (ViewData["Message"] != null)
-    {
-        <div class="alert alert-success" role="alert">
-            @ViewData["Message"].ToString()
+﻿@*<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Phone
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <li><a class="dropdown-item" href="/Phone/Index">Get Data</a></li>
+                        <li><a class="dropdown-item" href="/Phone/Index">Compare Data</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-    }
-    <div class="form-group">
-        <label for="Url">Url</label>
-        <input class="form-control" id="Url" type="url" asp-for="Url" required placeholder="Url" />
     </div>
-    <div class="form-group">
-        <button class="btn btn-primary" type="submit" name="submit">Dosyayı oluştur</button>
-    </div>
-</form>
+</nav>*@
