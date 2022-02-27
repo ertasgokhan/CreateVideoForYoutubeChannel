@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CreateVideoForYoutubeChannel.Controllers
 {
-    public class PhoneController : Controller
+    public class PowerBankController : Controller
     {
         public IActionResult Index()
         {
@@ -41,7 +41,7 @@ namespace CreateVideoForYoutubeChannel.Controllers
             HtmlNode productName = doc.DocumentNode.SelectSingleNode("//div[@class='baslik']//h1//a");
             model.ProductName = productName.InnerText;
 
-            string filepath = @"C:\Yutup\PHONE\" + model.ProductName.Replace(" ", "").Replace("/", "").Trim() + ".txt";
+            string filepath = @"C:\Yutup\POWERBANK\" + model.ProductName.Replace(" ", "").Replace("/", "").Trim() + ".txt";
 
             if (System.IO.File.Exists(filepath))
                 System.IO.File.Delete(filepath);
@@ -98,28 +98,28 @@ namespace CreateVideoForYoutubeChannel.Controllers
             return View(model);
         }
 
-        public IActionResult PhoneVS()
+        public IActionResult PowerBankVS()
         {
             return View();
         }
 
         [HttpPost]
-        public IActionResult PhoneVS(PhoneVSModel phoneVSModel)
+        public IActionResult PhoneVS(PowerBankModel powerBankVSModel)
         {
             // PPT
 
-            List<string> phone1Properties = new List<string>();
-            List<string> phone2Properties = new List<string>();
+            List<string> powerBank1Properties = new List<string>();
+            List<string> powerBank2Properties = new List<string>();
 
-            string filepathPhone1 = @"C:\Yutup\PHONE\" + phoneVSModel.Phone1.Replace(" ", "") + ".txt";
-            string filepathPhone2 = @"C:\Yutup\PHONE\" + phoneVSModel.Phone2.Replace(" ", "") + ".txt";
+            string filepathPhone1 = @"C:\Yutup\POWERBANK\" + powerBankVSModel.PowerBank1.Replace(" ", "") + ".txt";
+            string filepathPhone2 = @"C:\Yutup\POWERBANK\" + powerBankVSModel.PowerBank2.Replace(" ", "") + ".txt";
 
             using (StreamReader rd = System.IO.File.OpenText(filepathPhone1))
             {
                 while (!rd.EndOfStream)
                 {
                     string str = rd.ReadLine();
-                    phone1Properties.Add(str);
+                    powerBank1Properties.Add(str);
                 }
             }
 
@@ -128,71 +128,59 @@ namespace CreateVideoForYoutubeChannel.Controllers
                 while (!rd.EndOfStream)
                 {
                     string str = rd.ReadLine();
-                    phone2Properties.Add(str);
+                    powerBank2Properties.Add(str);
                 }
             }
 
             // just gets me the current location of the assembly to get a full path
-            string fileName = @"C:\Yutup\PHONE\VS\VS_PPT_PHONE.pptx";
+            string fileName = @"C:\Yutup\POWERBANK\VS\VS_PPT_PHONE.pptx";
 
             // open the presentation in edit mode -> the bool parameter stands for 'isEditable'
             using (PresentationDocument document = PresentationDocument.Open(fileName, true))
             {
-                string phone1NewItem = string.Empty;
-                string phone2NewItem = string.Empty;
+                string powerBank1NewItem = string.Empty;
+                string powerBank2NewItem = string.Empty;
 
-                foreach (var item in phone1Properties)
+                foreach (var item in powerBank1Properties)
                 {
-                    phone1NewItem = string.Format("Product1_{0}", item.Split("->")[0].Replace(" ", "_").Replace("/", "").Replace("(", "").Replace(")", "").Replace(".", ""));
+                    powerBank1NewItem = string.Format("Product1_{0}", item.Split("->")[0].Replace(" ", "_").Replace("/", "").Replace("(", "").Replace(")", "").Replace(".", ""));
 
                     // going through the slides of the presentation
                     foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
                     {
                         // searching for a text with the placeholder i want to replace
                         DocumentFormat.OpenXml.Drawing.Text text =
-                            slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == phone1NewItem);
+                            slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == powerBank1NewItem);
 
                         // change the text
                         if (text != null)
-                            text.Text = phone1Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1].Replace("Var", "Yes").Replace("Yok", "No").Replace("Milyon", "Million").Replace("Milyar", "Billion").Replace("Cam", "Glass").Replace("Alüminyum", "Aluminum").Replace("Gram", "Grams").Replace("Çekirdek", "Core").Replace("Kablosu", "Cable").Replace("Piksel", "Pixel").Replace("Çift Hat", "Dual SIM").Replace("Ocak", "January").Replace("Şubat", "February").Replace("Mart", "March").Replace("Nisan", "April").Replace("Mayıs", "May").Replace("Haziran", "June").Replace("Temmuz", "July").Replace("Ağustos", "August").Replace("Eylül", "September").Replace("Ekim", "October").Replace("Kasım", "November").Replace("Aralık", "December").Replace("Depolama seçeneği var", "Storage Option").Replace("Paslanmaz Çelik", "Non Rusting Steel").Replace("Çift Batarya", "Dual Battery").Replace("seçeneği var", "Option").Replace("Ekran İçinde", "Under-Display").Replace("Tek Hat", "Single SIM").Replace("İnç", "Inch");
+                            text.Text = powerBank1Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1].Replace("Var", "Yes").Replace("Yok", "No").Replace("Milyon", "Million").Replace("Milyar", "Billion").Replace("Cam", "Glass").Replace("Alüminyum", "Aluminum").Replace("Gram", "Grams").Replace("Çekirdek", "Core").Replace("Kablosu", "Cable").Replace("Piksel", "Pixel").Replace("Çift Hat", "Dual SIM").Replace("Ocak", "January").Replace("Şubat", "February").Replace("Mart", "March").Replace("Nisan", "April").Replace("Mayıs", "May").Replace("Haziran", "June").Replace("Temmuz", "July").Replace("Ağustos", "August").Replace("Eylül", "September").Replace("Ekim", "October").Replace("Kasım", "November").Replace("Aralık", "December").Replace("Depolama seçeneği var", "Storage Option").Replace("Paslanmaz Çelik", "Non Rusting Steel").Replace("Çift Batarya", "Dual Battery").Replace("seçeneği var", "Option").Replace("Ekran İçinde", "Under-Display").Replace("Tek Hat", "Single SIM").Replace("İnç", "Inch");
                     }
                 }
 
-                foreach (var item in phone2Properties)
+                foreach (var item in powerBank2Properties)
                 {
-                    phone2NewItem = string.Format("Product2_{0}", item.Split("->")[0].Replace(" ", "_").Replace("/", "").Replace("(", "").Replace(")", "").Replace(".", ""));
+                    powerBank2NewItem = string.Format("Product2_{0}", item.Split("->")[0].Replace(" ", "_").Replace("/", "").Replace("(", "").Replace(")", "").Replace(".", ""));
 
                     // going through the slides of the presentation
                     foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
                     {
                         // searching for a text with the placeholder i want to replace
                         DocumentFormat.OpenXml.Drawing.Text text =
-                            slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == phone2NewItem);
+                            slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == powerBank2NewItem);
 
                         // change the text
                         if (text != null)
-                            text.Text = phone2Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1].Replace("Var", "Yes").Replace("Yok", "No").Replace("Milyon", "Million").Replace("Milyar", "Billion").Replace("Cam", "Glass").Replace("Alüminyum", "Aluminum").Replace("Gram", "Grams").Replace("Çekirdek", "Core").Replace("Kablosu", "Cable").Replace("Piksel", "Pixel").Replace("Çift Hat", "Dual SIM").Replace("Ocak", "January").Replace("Şubat", "February").Replace("Mart", "March").Replace("Nisan", "April").Replace("Mayıs", "May").Replace("Haziran", "June").Replace("Temmuz", "July").Replace("Ağustos", "August").Replace("Eylül", "September").Replace("Ekim", "October").Replace("Kasım", "November").Replace("Aralık", "December").Replace("Depolama seçeneği var", "Storage Option").Replace("Paslanmaz Çelik", "Non Rusting Steel").Replace("Çift Batarya", "Dual Battery").Replace("seçeneği var", "Option").Replace("Ekran İçinde", "Under-Display").Replace("Tek Hat", "Single SIM").Replace("İnç", "Inch");
+                            text.Text = powerBank2Properties.FirstOrDefault(x => x.Contains(item)).Split("->")[1].Replace("Var", "Yes").Replace("Yok", "No").Replace("Milyon", "Million").Replace("Milyar", "Billion").Replace("Cam", "Glass").Replace("Alüminyum", "Aluminum").Replace("Gram", "Grams").Replace("Çekirdek", "Core").Replace("Kablosu", "Cable").Replace("Piksel", "Pixel").Replace("Çift Hat", "Dual SIM").Replace("Ocak", "January").Replace("Şubat", "February").Replace("Mart", "March").Replace("Nisan", "April").Replace("Mayıs", "May").Replace("Haziran", "June").Replace("Temmuz", "July").Replace("Ağustos", "August").Replace("Eylül", "September").Replace("Ekim", "October").Replace("Kasım", "November").Replace("Aralık", "December").Replace("Depolama seçeneği var", "Storage Option").Replace("Paslanmaz Çelik", "Non Rusting Steel").Replace("Çift Batarya", "Dual Battery").Replace("seçeneği var", "Option").Replace("Ekran İçinde", "Under-Display").Replace("Tek Hat", "Single SIM").Replace("İnç", "Inch");
                     }
                 }
-
-                //// going through the slides of the presentation
-                //foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
-                //{
-                //    // searching for the second text with the placeholder i want to replace
-                //    text =
-                //        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product2_Çıkış_Yılı");
-
-                //    // change the text
-                //    if (text != null)
-                //        text.Text = phone1Properties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1];
-                //}
 
                 document.Save();
             }
 
             ViewData["Message"] = "PPT Başarıyla Güncellenmiştir";
 
-            return View(phoneVSModel);
+            return View(powerBankVSModel);
         }
     }
 }

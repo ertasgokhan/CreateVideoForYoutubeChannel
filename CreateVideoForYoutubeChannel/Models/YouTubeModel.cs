@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CreateVideoForYoutubeChannel.Models
 {
-    public class YuotubeModel
+    public class YouTubeModel
     {
         public string ProductName { get; set; }
         public string FolderName { get; set; }

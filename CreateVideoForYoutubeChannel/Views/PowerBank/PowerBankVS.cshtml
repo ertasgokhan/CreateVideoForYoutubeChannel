@@ -1,0 +1,22 @@
+﻿@model PowerBankModel
+
+<form asp-action="PowerBankVS" method="post" novalidate="">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewData["Message"].ToString()
+        </div>
+    }
+    <div class="form-group">
+        <label for="PowerBank1">PowerBank 1</label>
+        <input class="form-control" id="PowerBank1" type="text" asp-for="PowerBank1" required placeholder="PowerBank 1" />
+    </div>
+    <div class="form-group">
+        <label for="PowerBank2">PowerBank 2</label>
+        <input class="form-control" id="PowerBank2" type="text" asp-for="PowerBank2" required placeholder="PowerBank 2" />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit" name="submit">PPT Güncelle</button>
+    </div>
+</form>
