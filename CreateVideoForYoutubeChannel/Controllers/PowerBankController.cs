@@ -73,15 +73,38 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
                             HtmlNodeCollection groupChilNodes = groupProperty.ChildNodes;
 
-                            string propertyName = string.Empty;
-                            string propertyValue = string.Empty;
-
                             foreach (var item2 in groupChilNodes)
                             {
+                                string propertyName = string.Empty;
+                                string propertyValue = string.Empty;
+
                                 if (item2.Name == "li")
                                 {
                                     propertyName = item2.SelectSingleNode("strong").InnerText;
-                                    propertyValue = item2.SelectSingleNode("span//a") != null ? item2.SelectSingleNode("span//a").InnerText.Replace("\n", "") : item2.SelectSingleNode("span//span").InnerText.Replace("\n", "");
+
+                                    if ((item2.SelectNodes("span/span").Count < 2 && (item2.SelectSingleNode("span//a") != null || item2.SelectSingleNode("span//span") != null)) || item2.SelectSingleNode("span//span[@class='degerYok']") != null || item2.SelectSingleNode("span//span[@class='degerVar']") != null)
+                                    {
+                                        propertyValue = item2.SelectSingleNode("span//span").InnerText.Replace("\n", "");
+                                    }
+                                    else
+                                    {
+                                        HtmlNodeCollection propertyGroups = item2.SelectNodes(".//span[@class='']");
+
+                                        if (propertyGroups != null)
+                                        {
+                                            foreach (var item in propertyGroups)
+                                            {
+                                                if (string.IsNullOrEmpty(propertyValue))
+                                                {
+                                                    propertyValue = item.InnerText.Replace("\n", "");
+                                                }
+                                                else
+                                                {
+                                                    propertyValue += ", " + item.InnerText.Replace("\n", "");
+                                                }
+                                            }
+                                        }
+                                    }
 
                                     docItems += string.Format("{0}->{1} \n", propertyName, propertyValue);
                                 }
