@@ -1,0 +1,22 @@
+﻿@model RobotVacuumModel
+
+<form asp-action="PowerBankVS" method="post" novalidate="">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewData["Message"].ToString()
+        </div>
+    }
+    <div class="form-group">
+        <label for="RobotVacuum1">Robot Vacuum 1</label>
+        <input class="form-control" id="RobotVacuum1" type="text" asp-for="RobotVacuum1" required placeholder="Robot Vacuum 1" />
+    </div>
+    <div class="form-group">
+        <label for="RobotVacuum2">Robot Vacuum 2</label>
+        <input class="form-control" id="RobotVacuum2" type="text" asp-for="RobotVacuum2" required placeholder="Robot Vacuum 2" />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit" name="submit">PPT Güncelle</button>
+    </div>
+</form>
