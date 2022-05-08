@@ -1,0 +1,22 @@
+﻿@model TabletVSModel
+
+<form asp-action="TabletVS" method="post" novalidate="">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (ViewData["Message"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @ViewData["Message"].ToString()
+        </div>
+    }
+    <div class="form-group">
+        <label for="Tablet1">Tablet 1</label>
+        <input class="form-control" id="Tablet1" type="text" asp-for="Tablet1" required placeholder="Tablet 1" />
+    </div>
+    <div class="form-group">
+        <label for="Tablet2">Tablet 2</label>
+        <input class="form-control" id="Tablet2" type="text" asp-for="Tablet2" required placeholder="Tablet 2" />
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit" name="submit">PPT Güncelle</button>
+    </div>
+</form>
