@@ -1,14 +1,13 @@
 ﻿using CreateVideoForYoutubeChannel.Models;
+using CreateVideoForYoutubeChannel.PPTGenerate;
 using DocumentFormat.OpenXml.Packaging;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace CreateVideoForYoutubeChannel.Controllers
 {
@@ -175,20 +174,22 @@ namespace CreateVideoForYoutubeChannel.Controllers
                     }
                 }
 
-                //// going through the slides of the presentation
-                //foreach (SlidePart slidePart in document.PresentationPart.SlideParts)
-                //{
-                //    // searching for the second text with the placeholder i want to replace
-                //    text =
-                //        slidePart.RootElement.Descendants<DocumentFormat.OpenXml.Drawing.Text>().FirstOrDefault(x => x.Text == "Product2_Çıkış_Yılı");
-
-                //    // change the text
-                //    if (text != null)
-                //        text.Text = phone1Properties.FirstOrDefault(x => x.Contains("Çıkış Tarihi")).Split("->")[1];
-                //}
-
                 document.Save();
             }
+
+            const string srcFileName = @"C:\Yutup\PHONE\VS\VS_PPT_PHONE.pptx";
+            Pptx pptx = new Pptx(srcFileName, FileAccess.ReadWrite);
+            int nbSlides = pptx.SlidesCount();
+            
+            for (int i = 0; i < nbSlides; i++)
+            {
+                PptxSlide slide = pptx.GetSlide(i);
+                slide.ReplacePicture("product1", @"C:\Yutup\PHONE\VS\product1.png", "image/png");
+                slide.ReplacePicture("product2", @"C:\Yutup\PHONE\VS\product2.png", "image/png");
+
+            }
+
+            pptx.Close();
 
             ViewData["Message"] = "PPT Başarıyla Güncellenmiştir";
 

@@ -1,4 +1,5 @@
 ﻿using CreateVideoForYoutubeChannel.Models;
+using CreateVideoForYoutubeChannel.PPTGenerate;
 using DocumentFormat.OpenXml.Packaging;
 using HtmlAgilityPack;
 using Microsoft.AspNetCore.Mvc;
@@ -200,6 +201,20 @@ namespace CreateVideoForYoutubeChannel.Controllers
 
                 document.Save();
             }
+
+            const string srcFileName = @"C:\Yutup\POWERBANK\VS\VS_PPT_POWERBANK.pptx";
+            Pptx pptx = new Pptx(srcFileName, FileAccess.ReadWrite);
+            int nbSlides = pptx.SlidesCount();
+
+            for (int i = 0; i < nbSlides; i++)
+            {
+                PptxSlide slide = pptx.GetSlide(i);
+                slide.ReplacePicture("product1", @"C:\Yutup\POWERBANK\VS\product1.png", "image/png");
+                slide.ReplacePicture("product2", @"C:\Yutup\POWERBANK\VS\product2.png", "image/png");
+
+            }
+
+            pptx.Close();
 
             ViewData["Message"] = "PPT Başarıyla Güncellenmiştir";
 
